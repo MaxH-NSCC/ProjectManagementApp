@@ -1,0 +1,154 @@
+{
+    "Project Management App Json File": true,
+    "project": {
+        "title": "ProjectDemo",
+        "description": "Demo of my project managment app.",
+        "tasks": [
+            {
+                "title": "Add warnings for task deletion",
+                "description": "Add warnings for task deletion.\nThis is done with QMessageBox",
+                "category": "Done",
+                "start_date": "2025-03-25",
+                "end_date": "2025-03-26"
+            },
+            {
+                "title": "Add warnings for resource deletion",
+                "description": "Add warnings for resource deletion with QMessageBox",
+                "category": "Done",
+                "start_date": "2025-03-25",
+                "end_date": "2025-03-26"
+            },
+            {
+                "title": "Add more project settings",
+                "description": "Add more project settings. This includes adding them to core.py so they are saved to the project and add them to the project options tab.\nThese options will control what tabs are shown, what colour the timeline is and what warnings you get.",
+                "category": "Doing",
+                "start_date": "2025-03-26",
+                "end_date": "2025-03-30"
+            },
+            {
+                "title": "Add saveing and loading to JSON",
+                "description": "Use dicts in core.py to convert the project in the ram into written data in a JSON file",
+                "category": "Done",
+                "start_date": "2025-03-24",
+                "end_date": "2025-03-27"
+            },
+            {
+                "title": "Add task timeline",
+                "description": "Make a timeline tab. The GanttModel class extends QAbstractTableModel to manage and display tasks in a table format, where each row represents a task and each column represents a day in the project's timeline. The model will determin the project's start and end dates dynamically by analyzing task dates, then give each task a colored background corresponding to its status category (e.g., \"Backlog,\" \"To Do,\" etc.), as defined in STATUS_COLORS. The TimelineTab class acts as a container for a QTableView, displaying the Gantt chart using the GanttModel. It also enables users to view task details by double-clicking on a task row, opening a TaskDialog in read-only mode. The timeline automatically adjusts when tasks are updated, ensuring that new data is reflected in the UI upon refresh.",
+                "category": "Done",
+                "start_date": "2025-03-17",
+                "end_date": "2025-03-30"
+            },
+            {
+                "title": "Update project options",
+                "description": "Update the project options tab so that it can use Qcolordialog and Qcheckbox to update the projects saved settings.",
+                "category": "To Do",
+                "start_date": "2025-03-26",
+                "end_date": "2025-03-30"
+            },
+            {
+                "title": "Update resources for QoL features",
+                "description": "Add the option to search and filter resources. Add attaching resources to a project task.",
+                "category": "Backlog",
+                "start_date": "2025-03-31",
+                "end_date": "2025-04-06"
+            },
+            {
+                "title": "Add reorganizing tasks",
+                "description": "Add the option to change the order tasks appear in the timeline and tasks tab.",
+                "category": "Backlog",
+                "start_date": "2025-03-31",
+                "end_date": "2025-04-06"
+            },
+            {
+                "title": "Task Categories",
+                "description": "Add user created task categories. This will change the order tasks are displayed in the timeline and task tab as they will be grouped. Users will be able to make a task category and give it a colour in a new tab and then tasks will be able to be given a category. Tasks in that category in the task tab will have a highlight of that colour",
+                "category": "Backlog",
+                "start_date": "2025-03-31",
+                "end_date": "2025-04-06"
+            },
+            {
+                "title": "Add warning for loading and exiting the app",
+                "description": "",
+                "category": "Done",
+                "start_date": "2025-03-24",
+                "end_date": "2025-03-30"
+            },
+            {
+                "title": "Key Shortcuts",
+                "description": "Add ctrl for save\nctrl shift s for save as\netc.\n",
+                "category": "Doing",
+                "start_date": "2025-03-24",
+                "end_date": "2025-03-30"
+            },
+            {
+                "title": "Make project an exe",
+                "description": "Make the project an exe file so that it can be run without the IDE",
+                "category": "To Do",
+                "start_date": "2025-03-31",
+                "end_date": "2025-04-06"
+            },
+            {
+                "title": "Add styling",
+                "description": "Add dark mode option to the app\nAdd styling to the project widgets so they look a bit nicer in the task tab of the project.",
+                "category": "Backlog",
+                "start_date": "2025-03-31",
+                "end_date": "2025-04-06"
+            },
+            {
+                "title": "Timeline reordering",
+                "description": "Maybe update the project timeline so that it automatically puts the tasks in order from end due date so that they look nicer in the project timeline",
+                "category": "Backlog",
+                "start_date": "2025-03-28",
+                "end_date": "2025-04-06"
+            },
+            {
+                "title": "Test Demo",
+                "description": "",
+                "category": "Backlog",
+                "start_date": "2025-03-28",
+                "end_date": "2025-03-28"
+            }
+        ],
+        "resources": [
+            {
+                "title": "Color Select Resource",
+                "path": "https://www.geeksforgeeks.org/pyqt5-qcolordialog-selected-color/",
+                "is_link": true
+            }
+        ],
+        "settings": {
+            "timeline_colours": [
+                [
+                    169,
+                    169,
+                    169
+                ],
+                [
+                    255,
+                    69,
+                    69
+                ],
+                [
+                    255,
+                    165,
+                    0
+                ],
+                [
+                    50,
+                    205,
+                    50
+                ]
+            ],
+            "tabs_displayed": [
+                true,
+                true,
+                true
+            ],
+            "default_height": 600,
+            "default_width": 800,
+            "remove_task_warn": true,
+            "remove_res_warn": true
+        }
+    }
+}

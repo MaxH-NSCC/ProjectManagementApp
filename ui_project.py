@@ -1,132 +1,141 @@
+import sys
 import os
-from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QPushButton, QTabWidget, QListWidget, QListWidgetItem, QMenu, QAction, QDialog, QLabel, QTextEdit, QLineEdit, QHBoxLayout, QMessageBox, QFormLayout
-from PyQt5.QtCore import Qt
-
-class TaskDialog(QDialog):
-    def __init__(self, title="", description="", read_only=False, parent=None):
-        super().__init__(parent)
-        self.setWindowTitle("Task Details" if read_only else "New Task")
-        layout = QVBoxLayout()
-        
-        self.title_edit = QLineEdit(title)
-        self.desc_edit = QTextEdit(description)
-        
-        if read_only:
-            self.title_edit.setReadOnly(True)
-            self.desc_edit.setReadOnly(True)
-        
-        layout.addWidget(QLabel("Title:"))
-        layout.addWidget(self.title_edit)
-        layout.addWidget(QLabel("Description:"))
-        layout.addWidget(self.desc_edit)
-        
-        if not read_only:
-            self.ok_button = QPushButton("Save")
-            self.ok_button.clicked.connect(self.accept)
-            layout.addWidget(self.ok_button)
-        
-        self.setLayout(layout)
-    
-    def get_task_details(self):
-        return self.title_edit.text(), self.desc_edit.toPlainText()
+import json
+import core
+from PyQt5.QtWidgets import (
+    QApplication, QWidget, QVBoxLayout, QTabWidget, QMenuBar, QMenu, QAction, QFileDialog, QMessageBox
+)
+from PyQt5.QtGui import QKeySequence
+from core import *
+from task_tab import TaskTab
+from resources_tab import ResourcesTab
+from timeline_tab import TimelineTab
+from project_options_tab import ProjectOptionsTab
 
 class ProjectScreen(QWidget):
-    def __init__(self):
+    def __init__(self, project, file_path=None):
         super().__init__()
-        self.setWindowTitle("Project Management App")
-        self.resize(800, 600)
-        
+        self.project = project
+        self.current_file = file_path
+        self.prevent_close_event = False
+        self.setWindowTitle(f"Project: {project.title}")
+        self.resize(self.project.settings.default_width, self.project.settings.default_height)
+
         layout = QVBoxLayout()
+        self.menu_bar = QMenuBar()
+        
+        # File menu
+        file_menu = QMenu("File", self)
+
+        # Load Project action (Ctrl + O)
+        load_action = QAction("Load Project", self)
+        load_action.setShortcut(QKeySequence("Ctrl+O"))  # Set shortcut
+        load_action.triggered.connect(self.load_project)
+
+        # Save action (Ctrl + S)
+        save_action = QAction("Save", self)
+        save_action.setShortcut(QKeySequence("Ctrl+S"))  # Set shortcut
+        save_action.triggered.connect(self.save_project)
+
+        # Save As action (Ctrl + Shift + S)
+        save_as_action = QAction("Save As", self)
+        save_as_action.setShortcut(QKeySequence("Ctrl+Shift+S"))  # Set shortcut
+        save_as_action.triggered.connect(self.save_project_as)
+
+        file_menu.addAction(load_action)
+        file_menu.addAction(save_action)
+        file_menu.addAction(save_as_action)
+        self.menu_bar.addMenu(file_menu)
+
+        layout.setMenuBar(self.menu_bar)
+
         self.tabs = QTabWidget()
         
-        self.task_board = QWidget()
-        self.task_layout = QHBoxLayout()
+        # Create tabs
+        self.task_tab = TaskTab(self.project)
+        self.resources_tab = ResourcesTab(self.project)
+        self.timeline_tab = TimelineTab(self.project)
+        self.options_tab = ProjectOptionsTab(self.project)
         
-        self.columns = {
-            "To Do": QListWidget(),
-            "Doing": QListWidget(),
-            "Done": QListWidget()
-        }
+        # Add tabs
+        self.tabs.addTab(self.task_tab, "Tasks")
+        self.tabs.addTab(self.resources_tab, "Resources")
+        self.tabs.addTab(self.timeline_tab, "Timeline")
+        self.tabs.addTab(self.options_tab, "Project Options")
         
-        for col_name, widget in self.columns.items():
-            column_layout = QVBoxLayout()
-            column_layout.addWidget(QLabel(col_name))
-            widget.setContextMenuPolicy(Qt.CustomContextMenu)
-            widget.customContextMenuRequested.connect(self.show_context_menu)
-            widget.itemDoubleClicked.connect(self.view_task)
-            column_layout.addWidget(widget)
-            self.task_layout.addLayout(column_layout)
-        
-        self.task_board.setLayout(self.task_layout)
-        
-        self.project_options = QWidget()
-        project_layout = QFormLayout()
-        self.project_title = QLineEdit()
-        self.project_description = QTextEdit()
-        project_layout.addRow("Project Title:", self.project_title)
-        project_layout.addRow("Project Description:", self.project_description)
-        self.project_options.setLayout(project_layout)
-        
-        self.tabs.addTab(self.task_board, "Tasks")
-        self.tabs.addTab(QWidget(), "Resources")
-        self.tabs.addTab(QWidget(), "Timeline")
-        self.tabs.addTab(self.project_options, "Project Options")
+        self.tabs.currentChanged.connect(self.on_tab_changed)
         
         layout.addWidget(self.tabs)
-        
-        self.add_task_btn = QPushButton("Add Task")
-        self.add_task_btn.clicked.connect(self.create_task)
-        
-        layout.addWidget(self.add_task_btn)
         self.setLayout(layout)
-    
-    def create_task(self):
-        dialog = TaskDialog()
-        if dialog.exec_():
-            title, desc = dialog.get_task_details()
-            if title:
-                item = QListWidgetItem(title)
-                item.setData(Qt.UserRole, desc)
-                self.columns["To Do"].addItem(item)
-    
-    def view_task(self, item):
-        dialog = TaskDialog(item.text(), item.data(Qt.UserRole), read_only=True)
-        dialog.exec_()
-    
-    def show_context_menu(self, position):
-        sender_widget = self.sender()
-        item = sender_widget.itemAt(position)
-        if item:
-            menu = QMenu()
-            edit_action = QAction("Edit", self)
-            remove_action = QAction("Remove", self)
-            move_action = QMenu("Move to")
+
+    def on_tab_changed(self, index):
+        if self.tabs.tabText(index) == "Timeline":
+            self.timeline_tab.refresh()
+
+    def save_project(self):
+        if core.loaded:  # If loaded is True, just save
+            self._write_to_file(self.current_file)
+        else:  # Otherwise, do "Save As"
+            self.save_project_as()
+
+    def save_project_as(self):
+        options = QFileDialog.Options()
+        file_name, _ = QFileDialog.getSaveFileName(self, "Save Project As", "", "JSON Files (*.json)", options=options)
+        
+        if file_name:
+            self.current_file = file_name
+            core.loaded = True  # Mark project as loaded after saving
+            self._write_to_file(file_name)
+
+    def _write_to_file(self, file_path):
+        try:
+            data = {
+                "Project Management App Json File": True,
+                "project": self.project.to_dict()
+            }
+            with open(file_path, "w") as file:
+                json.dump(data, file, indent=4)
             
-            for col in self.columns:
-                if self.columns[col] != sender_widget:
-                    move_action.addAction(col, lambda col=col: self.move_task(item, sender_widget, col))
-            
-            edit_action.triggered.connect(lambda: self.edit_task(item))
-            remove_action.triggered.connect(lambda: self.remove_task(item, sender_widget))
-            
-            menu.addAction(edit_action)
-            menu.addMenu(move_action)
-            menu.addAction(remove_action)
-            
-            menu.exec_(sender_widget.mapToGlobal(position))
-    
-    def edit_task(self, item):
-        dialog = TaskDialog(item.text(), item.data(Qt.UserRole))
-        if dialog.exec_():
-            title, desc = dialog.get_task_details()
-            item.setText(title)
-            item.setData(Qt.UserRole, desc)
-    
-    def remove_task(self, item, widget):
-        widget.takeItem(widget.row(item))
-    
-    def move_task(self, item, from_widget, to_column):
-        new_item = QListWidgetItem(item.text())
-        new_item.setData(Qt.UserRole, item.data(Qt.UserRole))
-        self.columns[to_column].addItem(new_item)
-        from_widget.takeItem(from_widget.row(item))
+            QMessageBox.information(self, "Save Successful", "Project saved successfully!")
+        except Exception as e:
+            QMessageBox.critical(self, "Save Error", f"Failed to save project: {e}")
+
+    def load_project(self):
+        reply = QMessageBox.question(
+            self, "Load Project", "Do you want to save changes before loading another project?",
+            QMessageBox.Yes | QMessageBox.No | QMessageBox.Cancel
+        )
+
+        if reply == QMessageBox.Cancel:
+            return  
+
+        if reply == QMessageBox.Yes:
+            self.save_project()  
+
+        # Prevent closeEvent from asking again
+        self.prevent_close_event = True  
+        
+        from ui_main import StartupScreen
+        self.startup_screen = StartupScreen()
+        self.startup_screen.show()
+        
+        self.close()
+
+    def closeEvent(self, event):
+            if self.prevent_close_event:
+                event.accept()  # Bypass confirmation when prevent_close_event is True
+                return  
+
+            # Normal close confirmation
+            reply = QMessageBox.question(
+                self, "Exit", "Do you want to save changes before exiting?",
+                QMessageBox.Yes | QMessageBox.No | QMessageBox.Cancel
+            )
+
+            if reply == QMessageBox.Cancel:
+                event.ignore()  # Stop the window from closing
+            elif reply == QMessageBox.Yes:
+                self.save_project()
+                event.accept()
+            else:
+                event.accept()

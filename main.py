@@ -4,6 +4,7 @@ import ui_main
 
 if __name__ == "__main__":
     app = QApplication([])
+    # start the startup screen
     window = ui_main.StartupScreen()
     window.show()
     app.exec_()
