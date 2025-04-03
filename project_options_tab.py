@@ -1,5 +1,5 @@
-from PyQt5.QtWidgets import QWidget, QVBoxLayout, QFormLayout, QLineEdit, QTextEdit, QCheckBox, QPushButton
-
+from PyQt5.QtWidgets import QWidget, QVBoxLayout, QFormLayout, QLineEdit, QTextEdit, QCheckBox, QPushButton, QLabel, QMessageBox
+from PyQt5.QtGui import QIntValidator
 class ProjectOptionsTab(QWidget):
     def __init__(self, project, parent=None):
         super().__init__(parent)
@@ -21,16 +21,32 @@ class ProjectOptionsTab(QWidget):
         self.update_button = QPushButton("Update Settings")
         self.update_button.clicked.connect(self.update_settings)
 
+        self.height_edit = QLineEdit(str(self.project.settings.default_height))
+        self.height_edit.setValidator(QIntValidator(1, 9999, self))
+
+        self.width_edit = QLineEdit(str(self.project.settings.default_width))
+        self.width_edit.setValidator(QIntValidator(1, 9999, self))
+
         layout.addRow("Project Title:", self.project_title)
         layout.addRow("Project Description:", self.project_description)
         layout.addWidget(self.task_delete_warning)
         layout.addWidget(self.res_delete_warning)
+        layout.addWidget(QLabel("Default App Height"))
+        layout.addWidget(self.height_edit)
+        layout.addWidget(QLabel("Default App Width"))
+        layout.addWidget(self.width_edit)
         layout.addWidget(self.update_button)
         layout.addWidget(self.reset_button)
 
         self.setLayout(layout)
 
     def reset_settings(self):
+        QMessageBox.information(
+            self, 
+            "Settings Updated", 
+            "Some settings may require you to reload the project to take effect.", 
+            QMessageBox.Ok
+        )
         new_title = self.project.title
         new_description = self.project.description
         new_remove_task_warn = True
@@ -41,22 +57,35 @@ class ProjectOptionsTab(QWidget):
 
         self.project.update_settings(new_title, new_description, new_timeline_colours, new_height, new_width, new_remove_task_warn, new_remove_res_warn)
 
+
+    # If height is empty or 0, set it to 1
+    def verify_height(self):
+        if not self.height_edit.text() or int(self.height_edit.text()) == 0:
+            self.height_edit.setText('1')
+
+    # If width is empty or 0, set it to 1
+    def verify_width(self):
+        if not self.width_edit.text() or int(self.width_edit.text()) == 0:
+            self.width_edit.setText('1')
+
     # Updates the settings
     def update_settings(self):
+        self.verify_height()
+        self.verify_width()
+        QMessageBox.information(
+            self, 
+            "Settings Updated", 
+            "Some settings may require you to reload the project to take effect.", 
+            QMessageBox.Ok
+        )
         new_title = self.project_title.text()
         new_description = self.project_description.toPlainText()
         new_remove_task_warn = self.task_delete_warning.isChecked()
         new_remove_res_warn = self.res_delete_warning.isChecked()
         new_timeline_colours = self.project.settings.timeline_colours
-        new_height = self.project.settings.default_height
-        new_width = self.project.settings.default_width
+        new_height = int(self.height_edit.text())
+        new_width = int(self.width_edit.text())
 
         self.project.update_settings(new_title, new_description, new_timeline_colours, new_height, new_width, new_remove_task_warn, new_remove_res_warn)
         
         # Colour picks for timeline colours
-        # Number inputs for the default width and height
-        # Checkbox for task deletion warning
-        # Checkbox for res deletion warning
-        # Reset settings to default option that gives warning
-        # Save settings button that says you may need to restart the app to see some changes (Saves settings, updates task title and description)
-        # make it say it wont update the project files filename so you'll need to change that yourself if you want that

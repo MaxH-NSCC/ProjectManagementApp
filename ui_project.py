@@ -28,7 +28,7 @@ class ProjectScreen(QWidget):
         file_menu = QMenu("File", self)
 
         # Load Project action (Ctrl + O)
-        load_action = QAction("Load Project", self)
+        load_action = QAction("Open Project", self)
         load_action.setShortcut(QKeySequence("Ctrl+O"))  # Set shortcut
         load_action.triggered.connect(self.load_project)
 

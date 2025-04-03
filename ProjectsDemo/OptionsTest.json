@@ -118,10 +118,10 @@
                 true,
                 true
             ],
-            "default_height": 600,
-            "default_width": 800,
-            "remove_task_warn": false,
-            "remove_res_warn": false
+            "default_height": 1200,
+            "default_width": 1600,
+            "remove_task_warn": true,
+            "remove_res_warn": true
         }
     }
 }
