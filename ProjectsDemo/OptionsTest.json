@@ -1,8 +1,8 @@
 {
     "Project Management App Json File": true,
     "project": {
-        "title": "ProjectDemo",
-        "description": "Demo of my project managment app.",
+        "title": "ProjectDemo UPDATED",
+        "description": "UPDATED Demo of my project managment app.",
         "tasks": [
             {
                 "title": "Add warnings for task deletion",
@@ -54,20 +54,6 @@
                 "end_date": "2025-04-06"
             },
             {
-                "title": "Add reorganizing tasks",
-                "description": "Add the option to change the order tasks appear in the timeline and tasks tab.",
-                "category": "Backlog",
-                "start_date": "2025-03-31",
-                "end_date": "2025-04-06"
-            },
-            {
-                "title": "Task Categories",
-                "description": "Add user created task categories. This will change the order tasks are displayed in the timeline and task tab as they will be grouped. Users will be able to make a task category and give it a colour in a new tab and then tasks will be able to be given a category. Tasks in that category in the task tab will have a highlight of that colour",
-                "category": "Backlog",
-                "start_date": "2025-03-31",
-                "end_date": "2025-04-06"
-            },
-            {
                 "title": "Add warning for loading and exiting the app",
                 "description": "",
                 "category": "Done",
@@ -89,13 +75,6 @@
                 "end_date": "2025-04-06"
             },
             {
-                "title": "Add styling",
-                "description": "Add dark mode option to the app\nAdd styling to the project widgets so they look a bit nicer in the task tab of the project.",
-                "category": "Backlog",
-                "start_date": "2025-03-31",
-                "end_date": "2025-04-06"
-            },
-            {
                 "title": "Timeline reordering",
                 "description": "Maybe update the project timeline so that it automatically puts the tasks in order from end due date so that they look nicer in the project timeline",
                 "category": "Backlog",
@@ -110,13 +89,7 @@
                 "end_date": "2025-03-28"
             }
         ],
-        "resources": [
-            {
-                "title": "Color Select Resource",
-                "path": "https://www.geeksforgeeks.org/pyqt5-qcolordialog-selected-color/",
-                "is_link": true
-            }
-        ],
+        "resources": [],
         "settings": {
             "timeline_colours": [
                 [
@@ -147,8 +120,8 @@
             ],
             "default_height": 600,
             "default_width": 800,
-            "remove_task_warn": true,
-            "remove_res_warn": true
+            "remove_task_warn": false,
+            "remove_res_warn": false
         }
     }
 }

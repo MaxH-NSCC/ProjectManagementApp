@@ -139,13 +139,14 @@ class Project:
                 del self.resources[i]
                 break
 
-    def update_settings(self, new_timeline_colours, new_tabs_displayed, new_height, new_width, new_remove_task_warn, new_remove_res_warn):
+    def update_settings(self, new_title, new_description, new_timeline_colours, new_height, new_width, new_remove_task_warn, new_remove_res_warn):
+        self.title = new_title
+        self.description = new_description
         self.settings.timeline_colours = new_timeline_colours
-        self.settings.tabs_displayed = new_tabs_displayed
         self.settings.default_height = new_height
         self.settings.default_width = new_width
-        self.remove_task_warn = new_remove_task_warn
-        self.remove_res_warn = new_remove_res_warn
+        self.settings.remove_task_warn = new_remove_task_warn
+        self.settings.remove_res_warn = new_remove_res_warn
 
     def to_dict(self):
         return {
