@@ -4,7 +4,7 @@ import urllib
 from PyQt5.QtWidgets import (
     QWidget, QVBoxLayout, QPushButton, QListWidget, QListWidgetItem, 
     QDialog, QLineEdit, QFileDialog, QHBoxLayout, QLabel, QMessageBox, 
-    QMenu, QApplication
+    QMenu, QApplication, QCheckBox
 )
 from PyQt5.QtCore import Qt
 from core import *
@@ -14,6 +14,27 @@ class ResourcesTab(QWidget):
         super().__init__(parent)
         self.project = project  # store reference to the project
         self.layout = QVBoxLayout()
+
+
+        # filters
+        filter_layout = QHBoxLayout()
+        self.search_bar = QLineEdit()
+        self.search_bar.setPlaceholderText("Search by name...")
+        self.search_bar.textChanged.connect(self.apply_filters)
+
+        self.file_checkbox = QCheckBox("Files")
+        self.file_checkbox.setChecked(True)
+        self.file_checkbox.stateChanged.connect(self.apply_filters)
+
+        self.link_checkbox = QCheckBox("Links")
+        self.link_checkbox.setChecked(True)
+        self.link_checkbox.stateChanged.connect(self.apply_filters)
+
+        filter_layout.addWidget(QLabel("Filter:"))
+        filter_layout.addWidget(self.search_bar)
+        filter_layout.addWidget(self.file_checkbox)
+        filter_layout.addWidget(self.link_checkbox)
+        self.layout.addLayout(filter_layout)
 
         # resource list
         self.resource_list = QListWidget()
@@ -35,12 +56,31 @@ class ResourcesTab(QWidget):
 
         self.refresh_list()  # load existing resources
 
-    def refresh_list(self):
-        # update the UI list with the current resources
-        self.resource_list.clear()
+
+    def apply_filters(self):
+        query = self.search_bar.text().lower()
+        show_files = self.file_checkbox.isChecked()
+        show_links = self.link_checkbox.isChecked()
+
+        filtered = []
         for res in self.project.resources:
+            name_matches = query in res.title.lower()
+            type_matches = (res.is_link and show_links) or (not res.is_link and show_files)
+
+            if name_matches and type_matches:
+                filtered.append(res)
+
+        self.refresh_list(filtered)
+
+    def refresh_list(self, filtered_resources=None):
+        self.resource_list.clear()
+
+        resources_to_display = filtered_resources if filtered_resources is not None else self.project.resources
+        sorted_resources = sorted(resources_to_display, key=lambda r: r.title.lower())
+
+        for res in sorted_resources:
             item = QListWidgetItem(f"{res.title} ({'Link' if res.is_link else 'File'})")
-            item.setData(Qt.UserRole, res)  # Store resource object inside item
+            item.setData(Qt.UserRole, res)
             self.resource_list.addItem(item)
 
     def add_file_resource(self):
@@ -50,9 +90,10 @@ class ResourcesTab(QWidget):
             title = os.path.basename(file_path)
             resource = Resource(title, file_path, is_link=False)
             if self.project.add_resource(resource):
-                self.refresh_list()
+                self.apply_filters()
             else:
                 QMessageBox.warning(self, "Duplicate Resource", "A resource with this name already exists!")
+
 
     def add_link_resource(self):
         dialog = ResourceDialog()
@@ -61,7 +102,7 @@ class ResourcesTab(QWidget):
             if title and link:
                 resource = Resource(title, link, is_link=True)
                 if self.project.add_resource(resource):
-                    self.refresh_list()
+                    self.apply_filters()
                 else:
                     QMessageBox.warning(self, "Duplicate Resource", "A resource with this name already exists!")
 

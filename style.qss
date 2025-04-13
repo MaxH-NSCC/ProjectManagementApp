@@ -1,0 +1,50 @@
+
+QWidget {
+    font-size: 10pt;
+    font-family: "Segoe UI", sans-serif;
+}
+
+QPushButton {
+    padding: 4px 10px;
+}
+
+
+QLineEdit, QTextEdit, QComboBox {
+    padding: 4px;
+}
+
+
+QListWidget, QListView {
+    font-size: 10pt;
+}
+
+
+QCheckBox, QLabel {
+    font-size: 10pt;
+}
+
+QFrame#taskFrame {
+    background-color: #f4f4f4;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 2px;
+}
+                           
+QFrame#descFrame {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 2px;
+    padding: 1px;
+}
+
+QFrame#taskFrame:hover {
+    background-color: #e8f0ff;
+    border: 1px solid #7aa6f8;
+}
+                           
+QFrame#datesFrame {
+    background-color: #fafafa;
+    border: 1px dashed #ccc;
+    border-radius: 2px;
+    padding: 1px;
+}

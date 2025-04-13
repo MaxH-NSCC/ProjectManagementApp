@@ -27,6 +27,9 @@ class ProjectOptionsTab(QWidget):
         self.width_edit = QLineEdit(str(self.project.settings.default_width))
         self.width_edit.setValidator(QIntValidator(1, 9999, self))
 
+        self.start_max = QCheckBox("Start window maximized")
+        self.start_max.setChecked(self.project.settings.start_maximized)
+
         layout.addRow("Project Title:", self.project_title)
         layout.addRow("Project Description:", self.project_description)
         layout.addWidget(self.task_delete_warning)
@@ -35,18 +38,13 @@ class ProjectOptionsTab(QWidget):
         layout.addWidget(self.height_edit)
         layout.addWidget(QLabel("Default App Width"))
         layout.addWidget(self.width_edit)
+        layout.addWidget(self.start_max)
         layout.addWidget(self.update_button)
         layout.addWidget(self.reset_button)
 
         self.setLayout(layout)
 
     def reset_settings(self):
-        QMessageBox.information(
-            self, 
-            "Settings Updated", 
-            "Some settings may require you to reload the project to take effect.", 
-            QMessageBox.Ok
-        )
         new_title = self.project.title
         new_description = self.project.description
         new_remove_task_warn = True
@@ -54,8 +52,24 @@ class ProjectOptionsTab(QWidget):
         new_timeline_colours = [(169, 169, 169), (255, 69, 69), (255, 165, 0), (50, 205, 50)]
         new_height = 600
         new_width = 800
+        new_start_maximized = True
 
-        self.project.update_settings(new_title, new_description, new_timeline_colours, new_height, new_width, new_remove_task_warn, new_remove_res_warn)
+        self.project.update_settings(new_title, new_description, new_timeline_colours, new_height, new_width, new_remove_task_warn, new_remove_res_warn, new_start_maximized)
+
+        # Reset the UI elements
+        self.task_delete_warning.setChecked(self.project.settings.remove_task_warn)
+        self.res_delete_warning.setChecked(self.project.settings.remove_res_warn)
+        self.start_max.setChecked(self.project.settings.start_maximized)
+
+        self.height_edit.setText(str(self.project.settings.default_height))
+        self.width_edit.setText(str(self.project.settings.default_width))
+
+        QMessageBox.information(
+            self, 
+            "Settings Updated", 
+            "Some settings may require you to reload the project to take effect.", 
+            QMessageBox.Ok
+        )
 
 
     # If height is empty or 0, set it to 1
@@ -72,12 +86,7 @@ class ProjectOptionsTab(QWidget):
     def update_settings(self):
         self.verify_height()
         self.verify_width()
-        QMessageBox.information(
-            self, 
-            "Settings Updated", 
-            "Some settings may require you to reload the project to take effect.", 
-            QMessageBox.Ok
-        )
+
         new_title = self.project_title.text()
         new_description = self.project_description.toPlainText()
         new_remove_task_warn = self.task_delete_warning.isChecked()
@@ -85,7 +94,13 @@ class ProjectOptionsTab(QWidget):
         new_timeline_colours = self.project.settings.timeline_colours
         new_height = int(self.height_edit.text())
         new_width = int(self.width_edit.text())
+        new_start_maximized = self.start_max.isChecked()
 
-        self.project.update_settings(new_title, new_description, new_timeline_colours, new_height, new_width, new_remove_task_warn, new_remove_res_warn)
+        self.project.update_settings(new_title, new_description, new_timeline_colours, new_height, new_width, new_remove_task_warn, new_remove_res_warn, new_start_maximized)
         
-        # Colour picks for timeline colours
+        QMessageBox.information(
+            self, 
+            "Settings Updated", 
+            "Some settings may require you to reload the project to take effect.", 
+            QMessageBox.Ok
+        )

@@ -25,6 +25,7 @@ class GanttModel(QAbstractTableModel):
             today = datetime.today()
             self.start_date, self.end_date = today, today
         else:
+            # Find the earliest start date and latest end date across all tasks
             self.start_date = min(datetime.strptime(task.start_date, "%Y-%m-%d") for task in self.tasks)
             self.end_date = max(datetime.strptime(task.end_date, "%Y-%m-%d") for task in self.tasks)
         self.endResetModel()

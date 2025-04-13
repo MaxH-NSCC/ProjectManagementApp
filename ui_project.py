@@ -68,6 +68,9 @@ class ProjectScreen(QWidget):
         layout.addWidget(self.tabs)
         self.setLayout(layout)
 
+        if project.settings.start_maximized:
+            self.showMaximized()
+
     def on_tab_changed(self, index):
         if self.tabs.tabText(index) == "Timeline":
             self.timeline_tab.refresh()
@@ -80,11 +83,19 @@ class ProjectScreen(QWidget):
 
     def save_project_as(self):
         options = QFileDialog.Options()
-        file_name, _ = QFileDialog.getSaveFileName(self, "Save Project As", "", "JSON Files (*.json)", options=options)
+        
+        # Default to Projects directory inside app directory
+        app_dir = os.path.dirname(os.path.abspath(__file__))
+        default_path = os.path.join(app_dir, "Projects")
+
+        # Suggest project name as default file name
+        suggested_name = os.path.join(default_path, f"{self.project.title}.json")
+        
+        file_name, _ = QFileDialog.getSaveFileName(self, "Save Project As", suggested_name, "JSON Files (*.json)", options=options)
         
         if file_name:
             self.current_file = file_name
-            core.loaded = True  # Mark project as loaded after saving
+            core.loaded = True
             self._write_to_file(file_name)
 
     def _write_to_file(self, file_path):

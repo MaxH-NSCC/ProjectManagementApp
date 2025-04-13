@@ -13,7 +13,7 @@ class ProjectInfoDialog(QDialog):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.setWindowTitle("New Project")
-        self.resize(350, 200)
+        self.resize(450, 250)
 
         layout = QVBoxLayout()
 
@@ -50,9 +50,13 @@ class StartupScreen(QWidget):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Project Manager - Startup")
-        self.resize(400, 250)
+        self.resize(500, 250) #400
         self.project_manager = ProjectManager()
-        self.current_directory = os.getcwd()  # Default to current directory
+        # self.current_directory = os.getcwd()  # OLD
+        app_dir = os.path.dirname(os.path.abspath(__file__))
+        default_projects_dir = os.path.join(app_dir, "Projects")
+        os.makedirs(default_projects_dir, exist_ok=True)
+        self.current_directory = default_projects_dir
 
         layout = QVBoxLayout()
 

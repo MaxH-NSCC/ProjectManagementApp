@@ -7,6 +7,7 @@ class TaskDialog(QDialog):
         self.project = project
         self.original_title = title
         self.setWindowTitle("Task Details" if read_only else "Edit/Create Task")
+        self.resize(400, 400)
         layout = QVBoxLayout()
 
         self.title_edit = QLineEdit(title)

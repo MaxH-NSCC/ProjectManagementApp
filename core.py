@@ -33,13 +33,14 @@ class Task:
         )
     
 class Settings:
-    def __init__(self, timeline_colours=None, tabs_displayed=None, default_height=600, default_width=800, remove_task_warn=None, remove_res_warn=None):
+    def __init__(self, timeline_colours=None, tabs_displayed=None, default_height=600, default_width=800, remove_task_warn=None, remove_res_warn=None, start_maximized=None):
         self.timeline_colours = timeline_colours or [(169, 169, 169), (255, 69, 69), (255, 165, 0), (50, 205, 50)]
         self.tabs_displayed = tabs_displayed or [True, True, True]
         self.default_height = default_height
         self.default_width = default_width
         self.remove_task_warn = remove_task_warn if remove_task_warn is not None else True
         self.remove_res_warn = remove_res_warn if remove_res_warn is not None else True
+        self.start_maximized = start_maximized if start_maximized is not None else True
 
     def to_dict(self):
         return {
@@ -49,6 +50,7 @@ class Settings:
             "default_width": self.default_width,
             "remove_task_warn": self.remove_task_warn,
             "remove_res_warn": self.remove_res_warn,
+            "start_maximized": self.start_maximized,
         }
     
     @classmethod
@@ -60,6 +62,7 @@ class Settings:
             data.get("default_width", 800),
             data.get("remove_task_warn"),
             data.get("remove_res_warn"),
+            data.get("start_maximized"),
         )
     
 
@@ -139,7 +142,7 @@ class Project:
                 del self.resources[i]
                 break
 
-    def update_settings(self, new_title, new_description, new_timeline_colours, new_height, new_width, new_remove_task_warn, new_remove_res_warn):
+    def update_settings(self, new_title, new_description, new_timeline_colours, new_height, new_width, new_remove_task_warn, new_remove_res_warn, new_start_maximized):
         self.title = new_title
         self.description = new_description
         self.settings.timeline_colours = new_timeline_colours
@@ -147,6 +150,7 @@ class Project:
         self.settings.default_width = new_width
         self.settings.remove_task_warn = new_remove_task_warn
         self.settings.remove_res_warn = new_remove_res_warn
+        self.settings.start_maximized = new_start_maximized
 
     def to_dict(self):
         return {
