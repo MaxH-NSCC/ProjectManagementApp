@@ -1,0 +1,63 @@
+Project Management App - Help Guide
+
+Welcome! Here's a quick guide to using the app effectively.
+
+---
+
+GENERAL NAVIGATION
+- Use the tabs to switch between different views: Tasks, Timeline, and Resources.
+- Projects can be saved and loaded via the File menu.
+
+---
+
+TASKS TAB
+- Click "New Task" to create a task with a title, description, category, and date range.
+- Double-click on a task row to view it in read-only mode.
+- Right click to see more options such as editing and deleting and moving the task.
+- Tasks are color-coded based on their category (Backlog, To Do, Doing, Done).
+
+---
+
+TIMELINE TAB
+- This is a visual Gantt-style timeline.
+- Tasks are shown across a time range with colored bars.
+- Double-click a task title in the vertical header to view it in read-only mode.
+- Use the scrollbars to move through time or across multiple tasks.
+
+---
+
+RESOURCES TAB
+- Here you can manage additional resources relevant to your project.
+- You can add links and files.
+
+---
+
+OPTIONS TAB
+- Change the project’s title and description.
+- Enable/disable warnings for deleting tasks or resources.
+- Set default window height and width for when the project loads.
+- Choose whether the window should start maximized.
+- Click "Update Settings" to save your changes.
+- Click "Reset Settings" to restore default values (excluding title and description).
+
+---
+
+STYLING / THEMES
+- The app supports both light and dark mode.
+- You can change the theme in the settings menu.
+- Themes affect fonts, background colors, and component styling.
+
+---
+
+TIPS & TRICKS
+- Save your project frequently!
+- The app remembers your last used theme across sessions.
+- Timeline view automatically adjusts to fit task date ranges.
+
+---
+
+TROUBLESHOOTING
+- If your project doesn't load, make sure you're using a valid `.json` file saved by the app.
+- Corrupted files may be missing the internal identifier.
+
+---
