@@ -1,6 +1,7 @@
 import sys
 import os
 import json
+import webbrowser
 import core
 from PyQt5.QtWidgets import (
     QApplication, QWidget, QVBoxLayout, QTabWidget, QMenuBar, QMenu, QAction, QFileDialog, QMessageBox
@@ -46,6 +47,40 @@ class ProjectScreen(QWidget):
         file_menu.addAction(save_action)
         file_menu.addAction(save_as_action)
         self.menu_bar.addMenu(file_menu)
+
+        # Add App Settings Menu
+        app_settings_menu = QMenu("App Settings", self)
+
+        # Light Theme action
+        light_theme_action = QAction("Light Theme", self)
+        light_theme_action.triggered.connect(lambda: self.set_theme("light"))
+
+        # Dark Theme action
+        dark_theme_action = QAction("Dark Theme", self)
+        dark_theme_action.triggered.connect(lambda: self.set_theme("dark"))
+
+        # Add actions to the App Settings menu
+        app_settings_menu.addAction(light_theme_action)
+        app_settings_menu.addAction(dark_theme_action)
+
+        self.menu_bar.addMenu(app_settings_menu)
+
+        # Add Help Menu
+        help_menu = QMenu("Help", self)
+
+        # Help Action (opens help.txt file)
+        help_action = QAction("View Help", self)
+        help_action.triggered.connect(self.open_help_file)
+
+        # GitHub Link Action
+        github_action = QAction("View GitHub", self)
+        github_action.triggered.connect(self.open_github)
+
+        help_menu.addAction(help_action)
+        help_menu.addAction(github_action)
+
+        self.menu_bar.addMenu(help_menu)
+
 
         layout.setMenuBar(self.menu_bar)
 
@@ -150,3 +185,22 @@ class ProjectScreen(QWidget):
                 event.accept()
             else:
                 event.accept()
+
+    def open_help_file(self):
+        help_file_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'help.txt')
+        if os.path.exists(help_file_path):
+            os.startfile(help_file_path)
+
+    def open_github(self):
+        webbrowser.open("https://github.com/MaxH-NSCC/ProjectManagementApp")
+
+    def set_theme(self, theme):
+        from core import save_app_settings, AppSettings
+        save_app_settings(AppSettings(theme=theme))
+        path = "style.qss" if theme == "light" else "style_dark.qss"
+        try:
+            with open(path, "r") as f:
+                self.setStyleSheet(f.read())
+                QApplication.instance().setStyleSheet(f.read())  # Apply to the whole app
+        except FileNotFoundError:
+            print(f"{path} not found. Skipping stylesheet.")

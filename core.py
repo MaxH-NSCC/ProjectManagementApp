@@ -211,3 +211,45 @@ def load_json(file_path):
     except (FileNotFoundError, json.JSONDecodeError, ValueError) as e:
         print(f"Error loading JSON: {e}")
         return None  # Return None instead of a blank project
+    
+class AppSettings:
+    def __init__(self, theme="light"):
+        self.theme = theme
+    
+    def to_dict(self):
+        return {
+            "theme": self.theme,
+        }
+    
+    @classmethod
+    def from_dict(cls, data):
+        return cls(
+            data.get("theme"),
+        )
+    
+def save_app_settings(settings, file_path="app_settings.json"):
+    data = {
+        "Project Management App Settings File": True,  # Unique identifier
+        "settings": settings.to_dict()
+    }
+    try:
+        with open(file_path, "w") as file:
+            json.dump(data, file, indent=4)
+    except Exception as e:
+        print(f"Error saving app settings: {e}")
+
+def load_app_settings(file_path="app_settings.json"):
+    try:
+        with open(file_path, "r") as file:
+            data = json.load(file)
+
+            # Check identifier
+            if data.get("Project Management App Settings File") is not True:
+                print("Invalid settings file: Missing app settings identifier.")
+                return None
+
+            return AppSettings.from_dict(data["settings"])
+
+    except (FileNotFoundError, json.JSONDecodeError, ValueError) as e:
+        print(f"Error loading app settings: {e}")
+        return None
