@@ -1,11 +1,6 @@
 import os
 import webbrowser
-import urllib
-from PyQt5.QtWidgets import (
-    QWidget, QVBoxLayout, QPushButton, QListWidget, QListWidgetItem, 
-    QDialog, QLineEdit, QFileDialog, QHBoxLayout, QLabel, QMessageBox, 
-    QMenu, QApplication, QCheckBox
-)
+from PyQt5.QtWidgets import QWidget, QVBoxLayout, QPushButton, QListWidget, QListWidgetItem, QDialog, QLineEdit, QFileDialog, QHBoxLayout, QLabel, QMessageBox, QMenu, QApplication, QCheckBox
 from PyQt5.QtCore import Qt
 from core import *
 

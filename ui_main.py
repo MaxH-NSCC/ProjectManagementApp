@@ -1,9 +1,5 @@
 import os
-import json
-from PyQt5.QtWidgets import (
-    QApplication, QWidget, QVBoxLayout, QPushButton, QDialog, QLabel, 
-    QTextEdit, QLineEdit, QFormLayout, QMessageBox, QListWidget, QFileDialog
-)
+from PyQt5.QtWidgets import QWidget, QVBoxLayout, QPushButton, QDialog, QLabel, QTextEdit, QLineEdit, QFormLayout, QMessageBox, QListWidget, QFileDialog
 from PyQt5.QtCore import Qt
 from ui_project import *
 from core import *

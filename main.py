@@ -1,4 +1,3 @@
-import sys
 from PyQt5.QtWidgets import QApplication
 from PyQt5.QtGui import QFont
 import ui_main

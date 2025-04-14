@@ -1,11 +1,8 @@
-import sys
 import os
 import json
 import webbrowser
 import core
-from PyQt5.QtWidgets import (
-    QApplication, QWidget, QVBoxLayout, QTabWidget, QMenuBar, QMenu, QAction, QFileDialog, QMessageBox
-)
+from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QTabWidget, QMenuBar, QMenu, QAction, QFileDialog, QMessageBox
 from PyQt5.QtGui import QKeySequence
 from core import *
 from task_tab import TaskTab

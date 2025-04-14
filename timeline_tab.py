@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QWidget, QTableView, QVBoxLayout, QHBoxLayout
+from PyQt5.QtWidgets import QWidget, QTableView, QHBoxLayout
 from PyQt5.QtGui import QColor
 from PyQt5.QtCore import Qt, QAbstractTableModel
 from datetime import datetime, timedelta
