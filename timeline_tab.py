@@ -4,14 +4,16 @@ from PyQt5.QtCore import Qt, QAbstractTableModel
 from datetime import datetime, timedelta
 from task_dialog import TaskDialog
 
+# Model that represents task data in a Gantt-style timeline
 class GanttModel(QAbstractTableModel):
     def __init__(self, project):
         super().__init__()
-        self.project = project
-        self.tasks = project.tasks
-        self.settings = project.settings
-        self.start_date, self.end_date = self.get_time_range()
+        self.project = project # Current Project
+        self.tasks = project.tasks # Projects tasks
+        self.settings = project.settings # Projects settings
+        self.start_date, self.end_date = self.get_time_range() # Calculate the time range
         
+         # Mapping of category names to timeline colors based on project settings
         self.STATUS_COLORS = {
             "Backlog": QColor(*self.project.settings.timeline_colours[0]),
             "To Do": QColor(*self.project.settings.timeline_colours[1]),
@@ -20,23 +22,25 @@ class GanttModel(QAbstractTableModel):
         }
 
     def get_time_range(self):
-        self.beginResetModel()
+        self.beginResetModel() # Notifies the view that a model reset is starting
         if not self.tasks:
+            # If no tasks, use today as both start and end
             today = datetime.today()
             self.start_date, self.end_date = today, today
         else:
             # Find the earliest start date and latest end date across all tasks
             self.start_date = min(datetime.strptime(task.start_date, "%Y-%m-%d") for task in self.tasks)
             self.end_date = max(datetime.strptime(task.end_date, "%Y-%m-%d") for task in self.tasks)
-        self.endResetModel()
+        self.endResetModel() # Notifies view that model reset is complete
         return self.start_date, self.end_date
 
     def rowCount(self, parent=None):
-        return len(self.tasks)
+        return len(self.tasks) # One row per task
 
     def columnCount(self, parent=None):
-        return (self.end_date - self.start_date).days + 1  
+        return (self.end_date - self.start_date).days + 1 # One column per day in the timeline range
 
+    # Goes through each cell and gives them no text but colours them if they are in the tasks time range
     def data(self, index, role=Qt.DisplayRole):
         if not index.isValid():
             return None

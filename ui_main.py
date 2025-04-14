@@ -46,23 +46,22 @@ class StartupScreen(QWidget):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Project Manager - Startup")
-        self.resize(500, 250) #400
+        self.resize(500, 250) # Default startup size
         self.project_manager = ProjectManager()
-        # self.current_directory = os.getcwd()  # OLD
         app_dir = os.path.dirname(os.path.abspath(__file__))
         default_projects_dir = os.path.join(app_dir, "Projects")
         os.makedirs(default_projects_dir, exist_ok=True)
         self.current_directory = default_projects_dir
 
-        layout = QVBoxLayout()
+        layout = QVBoxLayout() # Vertical layout
 
         # Selectable directory input
-        dir_layout = QVBoxLayout()
+        dir_layout = QVBoxLayout() # Layout inside of a layout
         self.dir_label = QLabel("Project Directory:")
         self.dir_box = QLineEdit(self.current_directory)
         self.dir_box.setReadOnly(True)
         self.browse_button = QPushButton("Browse")
-        self.browse_button.clicked.connect(self.select_directory)
+        self.browse_button.clicked.connect(self.select_directory) # Connects the function to the button click
 
         dir_layout.addWidget(self.dir_label)
         dir_layout.addWidget(self.dir_box)

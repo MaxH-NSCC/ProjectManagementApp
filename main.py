@@ -4,7 +4,7 @@ import ui_main
 from core import load_app_settings, AppSettings
 
 def load_stylesheet(app, theme="light"):
-    path = "style.qss" if theme == "light" else "style_dark.qss"
+    path = "style.qss" if theme == "light" else "style_dark.qss" # Chooses the file to get styling from depending on the global app setting for theme
     try:
         with open(path, "r") as f:
             app.setStyleSheet(f.read())
@@ -24,6 +24,6 @@ if __name__ == "__main__":
 
     load_stylesheet(app, app_settings.theme)
 
-    window = ui_main.StartupScreen()
+    window = ui_main.StartupScreen() # Start up app
     window.show()
     app.exec_()
