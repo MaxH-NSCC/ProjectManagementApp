@@ -1,5 +1,6 @@
 from PyQt5.QtWidgets import QWidget, QFormLayout, QLineEdit, QTextEdit, QCheckBox, QPushButton, QLabel, QMessageBox
 from PyQt5.QtGui import QIntValidator
+
 class ProjectOptionsTab(QWidget):
     def __init__(self, project, parent=None):
         super().__init__(parent)

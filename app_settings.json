@@ -1,6 +1,8 @@
 {
     "Project Management App Settings File": true,
     "settings": {
-        "theme": "dark"
+        "theme": "dark",
+        "last_project_dir": null,
+        "last_resource_dir": null
     }
 }

@@ -80,8 +80,15 @@ class ResourcesTab(QWidget):
 
     def add_file_resource(self):
         # prompt user to select a file and add it as a resource
-        file_path, _ = QFileDialog.getOpenFileName(self, "Select File")
+        app_settings = load_app_settings()
+        initial_dir = app_settings.last_resource_dir or os.path.expanduser("~")
+        file_path, _ = QFileDialog.getOpenFileName(self, "Select File", initial_dir)
         if file_path:
+
+            # Save last directory as default
+            app_settings.last_resource_dir = os.path.dirname(file_path)
+            save_app_settings(app_settings)
+
             title = os.path.basename(file_path)
             resource = Resource(title, file_path, is_link=False)
             if self.project.add_resource(resource):

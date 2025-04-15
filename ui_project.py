@@ -114,18 +114,25 @@ class ProjectScreen(QWidget):
             self.save_project_as()
 
     def save_project_as(self):
-        options = QFileDialog.Options()
-        
-        # Default to Projects directory inside app directory
-        app_dir = os.path.dirname(os.path.abspath(__file__))
-        default_path = os.path.join(app_dir, "Projects")
+        # Load app settings
+        app_settings = core.load_app_settings()
+        default_dir = app_settings.last_project_dir or os.path.expanduser("~")
 
         # Suggest project name as default file name
-        suggested_name = os.path.join(default_path, f"{self.project.title}.json")
-        
-        file_name, _ = QFileDialog.getSaveFileName(self, "Save Project As", suggested_name, "JSON Files (*.json)", options=options)
-        
+        suggested_name = os.path.join(default_dir, f"{self.project.title}.json")
+
+        file_name, _ = QFileDialog.getSaveFileName(
+            self,
+            "Save Project As",
+            suggested_name,
+            "JSON Files (*.json)"
+        )
+
         if file_name:
+            # Update last used directory in app settings
+            app_settings.last_project_dir = os.path.dirname(file_name)
+            core.save_app_settings(app_settings)
+
             self.current_file = file_name
             core.loaded = True
             self._write_to_file(file_name)

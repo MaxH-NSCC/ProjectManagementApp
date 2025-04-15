@@ -115,6 +115,21 @@
                 "title": "Color Select Resource",
                 "path": "https://www.geeksforgeeks.org/pyqt5-qcolordialog-selected-color/",
                 "is_link": true
+            },
+            {
+                "title": "Screenshot 2025-02-04 111200.png",
+                "path": "C:/Users/Max Gave/Pictures/Screenshots/Screenshot 2025-02-04 111200.png",
+                "is_link": false
+            },
+            {
+                "title": "DO TODAY AND FRIDAY.txt",
+                "path": "C:/Users/Max Gave/Desktop/DO TODAY AND FRIDAY.txt",
+                "is_link": false
+            },
+            {
+                "title": "MYSQLLOG.txt",
+                "path": "C:/Users/Max Gave/Desktop/MYSQLLOG.txt",
+                "is_link": false
             }
         ],
         "settings": {

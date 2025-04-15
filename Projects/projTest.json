@@ -1,0 +1,43 @@
+{
+    "Project Management App Json File": true,
+    "project": {
+        "title": "projTest",
+        "description": "",
+        "tasks": [],
+        "resources": [],
+        "settings": {
+            "timeline_colours": [
+                [
+                    169,
+                    169,
+                    169
+                ],
+                [
+                    255,
+                    69,
+                    69
+                ],
+                [
+                    255,
+                    165,
+                    0
+                ],
+                [
+                    50,
+                    205,
+                    50
+                ]
+            ],
+            "tabs_displayed": [
+                true,
+                true,
+                true
+            ],
+            "default_height": 600,
+            "default_width": 800,
+            "remove_task_warn": true,
+            "remove_res_warn": true,
+            "start_maximized": true
+        }
+    }
+}

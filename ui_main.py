@@ -48,10 +48,16 @@ class StartupScreen(QWidget):
         self.setWindowTitle("Project Manager - Startup")
         self.resize(500, 250) # Default startup size
         self.project_manager = ProjectManager()
-        app_dir = os.path.dirname(os.path.abspath(__file__))
-        default_projects_dir = os.path.join(app_dir, "Projects")
-        os.makedirs(default_projects_dir, exist_ok=True)
-        self.current_directory = default_projects_dir
+        app_settings = load_app_settings()
+        last_dir = app_settings.last_project_dir
+
+        if last_dir and os.path.exists(last_dir):
+            self.current_directory = last_dir
+        else:
+            app_dir = os.path.dirname(os.path.abspath(__file__))
+            fallback_dir = os.path.join(app_dir, "Projects")
+            os.makedirs(fallback_dir, exist_ok=True)
+            self.current_directory = fallback_dir
 
         layout = QVBoxLayout() # Vertical layout
 
@@ -93,6 +99,12 @@ class StartupScreen(QWidget):
         if dir_path:
             self.current_directory = dir_path
             self.dir_box.setText(dir_path)
+
+            # Save new directory to app settings
+            app_settings = load_app_settings()
+            app_settings.last_project_dir = dir_path
+            save_app_settings(app_settings)
+
             self.load_project_list()
 
     # Loads all JSON files in the selected directory into the list

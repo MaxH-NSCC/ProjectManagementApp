@@ -212,18 +212,24 @@ def load_json(file_path):
         return None  # Return None instead of a blank project
     
 class AppSettings:
-    def __init__(self, theme="light"):
+    def __init__(self, theme="light", last_project_dir=None, last_resource_dir=None):
         self.theme = theme
+        self.last_project_dir = last_project_dir
+        self.last_resource_dir = last_resource_dir
     
     def to_dict(self):
         return {
             "theme": self.theme,
+            "last_project_dir": self.last_project_dir,
+            "last_resource_dir": self.last_resource_dir,
         }
     
     @classmethod
     def from_dict(cls, data):
         return cls(
             data.get("theme"),
+            last_project_dir=data.get("last_project_dir"),
+            last_resource_dir=data.get("last_resource_dir"),
         )
     
 def save_app_settings(settings, file_path="app_settings.json"):
